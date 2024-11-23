@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ad0fe110.css",
+    "main.js": "/static/js/main.c25ea1da.js",
+    "static/js/453.5196bab1.chunk.js": "/static/js/453.5196bab1.chunk.js",
+    "static/media/Secretaria_de_Educação_PE.png": "/static/media/Secretaria_de_Educação_PE.783b27cd103af65d4a26.png",
+    "static/media/Logo_Oi_Futuro.png": "/static/media/Logo_Oi_Futuro.a116ddd37698900e0959.png",
+    "static/media/LogoPesquisador.png": "/static/media/LogoPesquisador.60c4e86a3d969838a2aa.png",
+    "static/media/LogoSuporte.png": "/static/media/LogoSuporte.b8fb6c22389b81384c06.png",
+    "static/media/LogoAnalista.png": "/static/media/LogoAnalista.62aa06d2e302671758da.png",
+    "static/media/Logo_ETE_Cicero_Dias.png": "/static/media/Logo_ETE_Cicero_Dias.7301b659e7300ec09f18.png",
+    "static/media/LogoEmpatia.png": "/static/media/LogoEmpatia.29c84a4488f046b93454.png",
+    "static/media/LogoRevisor.png": "/static/media/LogoRevisor.db637c2dad76c1c367fa.png",
+    "static/media/LogoInterpretacao.png": "/static/media/LogoInterpretacao.d43ab8bef83f5660e232.png",
+    "static/media/LogoComunicacao.png": "/static/media/LogoComunicacao.ade149450afae2e75141.png",
+    "static/media/LogoCuriosidade.png": "/static/media/LogoCuriosidade.05ecb08a031e5460c6fd.png",
+    "static/media/LogoOrganizacao.png": "/static/media/LogoOrganizacao.10b6a3fd92c2bb78787d.png",
+    "static/media/LogoFacilitador.png": "/static/media/LogoFacilitador.5d43e2987737d3111c70.png",
+    "index.html": "/index.html",
+    "main.ad0fe110.css.map": "/static/css/main.ad0fe110.css.map",
+    "main.c25ea1da.js.map": "/static/js/main.c25ea1da.js.map",
+    "453.5196bab1.chunk.js.map": "/static/js/453.5196bab1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ad0fe110.css",
+    "static/js/main.c25ea1da.js"
+  ]
+}
