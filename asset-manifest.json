@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/formacao-de-times-nave/static/css/main.ad0fe110.css",
+    "main.css": "/formacao-de-times-nave/static/css/main.e18c074e.css",
     "main.js": "/formacao-de-times-nave/static/js/main.ca3208e4.js",
     "static/js/453.5196bab1.chunk.js": "/formacao-de-times-nave/static/js/453.5196bab1.chunk.js",
     "static/media/Secretaria_de_Educação_PE.png": "/formacao-de-times-nave/static/media/Secretaria_de_Educação_PE.783b27cd103af65d4a26.png",
@@ -17,12 +17,12 @@
     "static/media/LogoOrganizacao.png": "/formacao-de-times-nave/static/media/LogoOrganizacao.10b6a3fd92c2bb78787d.png",
     "static/media/LogoFacilitador.png": "/formacao-de-times-nave/static/media/LogoFacilitador.5d43e2987737d3111c70.png",
     "index.html": "/formacao-de-times-nave/index.html",
-    "main.ad0fe110.css.map": "/formacao-de-times-nave/static/css/main.ad0fe110.css.map",
+    "main.e18c074e.css.map": "/formacao-de-times-nave/static/css/main.e18c074e.css.map",
     "main.ca3208e4.js.map": "/formacao-de-times-nave/static/js/main.ca3208e4.js.map",
     "453.5196bab1.chunk.js.map": "/formacao-de-times-nave/static/js/453.5196bab1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ad0fe110.css",
+    "static/css/main.e18c074e.css",
     "static/js/main.ca3208e4.js"
   ]
 }
