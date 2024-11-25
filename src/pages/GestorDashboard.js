@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CargoConfig from '../components/CargoConfig';
 import Toast from '../components/Toast';
-import PasswordModal from '../components/PasswordModal';
+import ModalPassword from '../components/ModalPassword';
 
 const GestorDashboard = () => {
   const [prazo, setPrazo] = useState('2024-12-15'); // Data inicial do prazo
@@ -68,7 +68,7 @@ const GestorDashboard = () => {
 
       {/* Renderização do modal */}
       {showModal && (
-        <PasswordModal
+        <ModalPassword
           onClose={() => setShowModal(false)} // Fecha o modal
           onConfirm={handleModalConfirm} // Confirma a senha e continua
         />

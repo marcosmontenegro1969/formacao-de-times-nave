@@ -98,6 +98,15 @@ const Autoavaliacao = () => {
   };
 
   const handleConfirm = () => {
+    // Atualiza o status do aluno para "autoavaliacao_concluida"
+    const email = localStorage.getItem('currentEmail');
+    if (email) {
+      const alunoData = JSON.parse(localStorage.getItem(email));
+      alunoData.status = 'autoavaliacao_concluida';
+      localStorage.setItem(email, JSON.stringify(alunoData));
+      localStorage.setItem('currentStatus', 'autoavaliacao_concluida');
+    }
+
     // Exibe a mensagem do toast
     setToastMessage(
       'Sua autoavaliação foi salva com sucesso! Aguarde a divulgação do seu cargo e a liberação para formação de equipes.'

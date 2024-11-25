@@ -1,16 +1,44 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { logoNave, logoSecEd, logoOiFuturo, logoETECiceroDias } from '../assets/logos';
 import Toast from '../components/Toast'; 
 
 const CreatePassword = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState(''); // Tipo de toast (success ou error)
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [statusMessage, setStatusMessage] = useState(''); // Status do aluno
+
+  useEffect(() => {
+    // Primeiro verifica se o email foi passado no state da navegação
+    const emailFromLocation = location.state?.email;
+
+    // Se não estiver no state, tenta pegar o e-mail do localStorage
+    const emailFromLocalStorage = localStorage.getItem('currentEmail');
+
+    // Define o e-mail atual, dando prioridade ao email passado pela rota
+    if (emailFromLocation) {
+      setEmail(emailFromLocation);
+    } else if (emailFromLocalStorage) {
+      setEmail(emailFromLocalStorage);
+    }
+
+    // Atualiza a mensagem de status com base no e-mail disponível
+    if (emailFromLocalStorage) {
+      const storedData = localStorage.getItem(emailFromLocalStorage);
+      if (storedData) {
+        const aluno = JSON.parse(storedData);
+        setStatusMessage(`Status atual: ${aluno.status}`);
+      } else {
+        setStatusMessage('');
+      }
+    }
+  }, [location]);
 
   const handleCreatePassword = (e) => {
     e.preventDefault();
@@ -22,7 +50,7 @@ const CreatePassword = () => {
       return;
     }
 
-    if (password.length < 3) {
+    if (password.length < 6) {
       showToast('A senha deve ter no mínimo 6 caracteres.', 'error');
       return;
     }
@@ -36,8 +64,17 @@ const CreatePassword = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      showToast('Senha criada com sucesso! Redirecionando...', 'success');
-      setTimeout(() => navigate('/aluno'), 2000); // Redireciona após 2 segundos
+      // Armazena a senha no localStorage
+      const alunoData = {
+        email: email,
+        temSenha: true,
+        senha: password,
+        status: 'autoavaliacao_pendente'
+      };
+      localStorage.setItem(email, JSON.stringify(alunoData));
+      showToast('Senha criada com sucesso! Redirecionando para o login...', 'success');
+      console.log("Senha criada e armazenada para:", alunoData); // Log para verificar armazenamento
+      setTimeout(() => navigate('/login', { state: { userType: 'ALUNO' } }), 2000); // Redireciona para a tela de login após 2 segundos
     }, 1500);
   };
 
@@ -119,8 +156,16 @@ const CreatePassword = () => {
           onClose={() => setToastMessage('')} // Fecha manualmente
         />
       )}
+
+      {/* Exibe o status atual do aluno no canto superior esquerdo */}
+      {statusMessage && (
+        <div className="absolute top-4 left-4 text-white">
+          {statusMessage}
+        </div>
+      )}
     </div>
   );
 };
 
 export default CreatePassword;
+

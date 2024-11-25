@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'; // Alterado para HashRouter
 import UserTypeSelection from './pages/UserTypeSelection';
 import LoginForm from './pages/LoginForm';
 import PainelMonitoramento from './pages/PainelMonitoramento';
@@ -8,6 +8,7 @@ import CreatePassword from './pages/CreatePassword';
 import AlunoDashboard from './pages/AlunoDashboard'; // Importando o AlunoDashboard
 import CargosPresentation from './pages/CargosPresentation';
 import Autoavaliacao from './pages/Autoavaliacao';
+import ForgotPassword from './pages/ForgotPassword';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/" element={<UserTypeSelection />} />                {/* Página inicial */}
         <Route path="/login" element={<LoginForm />} />                   {/* Página de login */}
         <Route path="/criar-senha" element={<CreatePassword />} />        {/* Página de criação de senha */}
+        <Route path="/esqueci-senha" element={<ForgotPassword />} />      {/* Página de esqueci minha senha */}
         
         {/* Rotas do gestor */}
         <Route path="/monitoramento" element={<PainelMonitoramento />} /> {/* Página de monitoramento */} 

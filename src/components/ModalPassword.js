@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const PasswordModal = ({ onClose, onConfirm }) => {
+const ModalPassword = ({ onClose, onConfirm }) => {
   const [password, setPassword] = useState('');
 
   const handleConfirm = () => {
@@ -44,4 +44,4 @@ const PasswordModal = ({ onClose, onConfirm }) => {
   );
 };
 
-export default PasswordModal;
+export default ModalPassword;
