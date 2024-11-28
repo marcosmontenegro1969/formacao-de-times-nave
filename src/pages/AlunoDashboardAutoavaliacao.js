@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logoNave, logoSecEd, logoOiFuturo, logoETECiceroDias } from '../assets/logos';
-import Toast from '../components/Toast'; // Certifique-se de que o caminho está correto
+import Toast from '../components/Toast'; //
 
-const AlunoDashboard = () => {
+const AlunoDashboardAutoavaliacao = () => {
   const navigate = useNavigate();
   const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState('success'); // Default: success
+  const [toastType] = useState('success'); // Default: success
+  const [status, setStatus] = useState(''); // Para exibir o status do aluno
+
+  // Recupera o status do aluno ao carregar o componente
+  useEffect(() => {
+    const currentStatus = localStorage.getItem('currentStatus');
+    setStatus(currentStatus || 'Status não encontrado');
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-dark_green_nave">
+      {/* Exibe o status atual do aluno no canto superior esquerdo */}
+      {status && (
+        <div className="absolute top-4 left-4 text-white text-sm md:text-base bg-black p-2 rounded">
+          Status Atual: {status}
+        </div>
+      )}
       <div className="bg-white shadow-md rounded-lg p-8 max-w-4xl w-full">
         {/* Botão Voltar */}
         <button
@@ -76,4 +89,4 @@ const AlunoDashboard = () => {
   );
 };
 
-export default AlunoDashboard;
+export default AlunoDashboardAutoavaliacao;

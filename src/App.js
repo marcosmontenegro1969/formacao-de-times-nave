@@ -5,10 +5,12 @@ import LoginForm from './pages/LoginForm';
 import PainelMonitoramento from './pages/PainelMonitoramento';
 import GestorDashboard from './pages/GestorDashboard';
 import CreatePassword from './pages/CreatePassword';
-import AlunoDashboard from './pages/AlunoDashboard'; // Importando o AlunoDashboard
+import AlunoDashboardAutoavaliacao from './pages/AlunoDashboardAutoavaliacao'; // Importando o AlunoDashboard
 import CargosPresentation from './pages/CargosPresentation';
 import Autoavaliacao from './pages/Autoavaliacao';
 import ForgotPassword from './pages/ForgotPassword';
+import AlunoDashboardFormacaoTime from './pages/AlunoDashboardFormacaoTime';
+import FormacaoTime from './pages/FormacaoTime';
 
 const App = () => {
   return (
@@ -26,9 +28,12 @@ const App = () => {
         <Route path="/gestor" element={<GestorDashboard />} />            {/* Página do painel do gestor */}
 
         {/* Rota para o painel do aluno */}
-        <Route path="/aluno" element={<AlunoDashboard />} />              {/* Página do painel do aluno */}
+        <Route path="/dashboard-aluno-autoavaliacao" element={<AlunoDashboardAutoavaliacao />} />              {/* Página do painel do aluno em autoavaliacao */}
         <Route path="/cargos" element={<CargosPresentation />} />         {/* Página de apresentação dos cargos */}
         <Route path="/autoavaliacao" element={<Autoavaliacao />} />       {/* Página de autoavaliação */}
+        <Route path="/dashboard-aluno-Formacao-Time" element={<AlunoDashboardFormacaoTime />} /> {/* Painel do Aluno em Formacao de Time */}
+        <Route path="/formacao-time" element={<FormacaoTime />} /> {/* Página de formação de time */}
+
         
       </Routes>
     </Router>

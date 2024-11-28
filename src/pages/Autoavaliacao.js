@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import LogoComunicacao from '../assets/LogoComunicacao.png';
@@ -53,6 +53,13 @@ const Autoavaliacao = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success'); // Tipo padrão: sucesso
   const competenciaAtual = competencias[indexAtual];
+  const [status, setStatus] = useState(''); // Para exibir o status do aluno
+
+  // Recupera o status do aluno ao carregar o componente
+  useEffect(() => {
+    const currentStatus = localStorage.getItem('currentStatus');
+    setStatus(currentStatus || 'Status não encontrado');
+  }, []);
 
   const handleNotaClick = (nota) => {
     const novaNotas = { ...notas };
@@ -93,18 +100,18 @@ const Autoavaliacao = () => {
     if (indexAtual > 0) setIndexAtual(indexAtual - 1);
   };
 
-  const handleSalvar = () => {
+  const handleSave = () => {
     setShowModal(true); // Exibe o modal
   };
 
   const handleConfirm = () => {
-    // Atualiza o status do aluno para "autoavaliacao_concluida"
+    // Atualiza o status do aluno para "formacao-de-time"
     const email = localStorage.getItem('currentEmail');
     if (email) {
       const alunoData = JSON.parse(localStorage.getItem(email));
-      alunoData.status = 'autoavaliacao_concluida';
+      alunoData.status = 'formacao-de-time';
       localStorage.setItem(email, JSON.stringify(alunoData));
-      localStorage.setItem('currentStatus', 'autoavaliacao_concluida');
+      localStorage.setItem('currentStatus', 'formacao-de-time');
     }
 
     // Exibe a mensagem do toast
@@ -116,7 +123,7 @@ const Autoavaliacao = () => {
     setTimeout(() => {
       setToastMessage(''); // Limpa a mensagem do toast
       navigate('/'); // Redireciona para o Painel do Aluno
-    }, 7000); // 5000 ms = 5 segundos
+    }, 5000); // 5000 ms = 5 segundos
   };
 
   const handleCancel = () => {
@@ -129,6 +136,13 @@ const Autoavaliacao = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-dark_green_nave p-4">
+      {/* Exibe o status atual do aluno no canto superior esquerdo */}
+      {status && (
+        <div className="absolute top-4 left-4 text-white text-sm md:text-base bg-black p-2 rounded">
+          Status: {status}
+        </div>
+      )}
+
       <div className="flex flex-col h-screen-auto rounded-lg bg-white p-4">
         <div className="flex items-center justify-between mb-8">
           <button
@@ -210,9 +224,9 @@ const Autoavaliacao = () => {
             <div className="flex justify-center mt-43">
               <button
                 className="py-2 px-4 bg-blue_flagPE text-white rounded-lg hover:bg-light_green_nave hover:text-black"
-                onClick={handleSalvar}
+                onClick={handleSave}
               >
-                Salvar sua Autoavaliação
+                Salvar Minha Autoavaliação
               </button>
             </div>
 

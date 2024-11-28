@@ -1,69 +1,87 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { logoNave, logoSecEd, logoOiFuturo, logoETECiceroDias } from '../assets/logos';
-import Toast from '../components/Toast'; 
-import ModalConfirmacao from '../components/ModalConfirmacao';
+import Toast from '../components/Toast';
+import ModalConfirmaCriarSenha from '../components/ModalConfirmaCriarSenha.js';
+import ModalConfirmaRepresentante from '../components/ModalConfirmaRepresentante';
+import StatusDisplay from '../components/StatusDisplay';
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const userType = location.state?.userType || 'ALUNO'; // Define o tipo de usuário (default: ALUNO)
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success'); // Default: success
   const [showCreatePasswordModal, setShowCreatePasswordModal] = useState(false);
-  const [statusMessage, setStatusMessage] = useState(''); // Status do aluno
+  const [showModalRepresentante, setShowModalRepresentante] = useState(false); // Estado para exibir o ModalConfirmaRepresentante
+  const [status, setStatus] = useState(''); // Corrige o estado para armazenar o status do aluno
+  const userType = location.state?.userType || 'ALUNO'; // Fallback para 'ALUNO'
+  const [isRepresentante, setIsRepresentante] = useState(false); // Estado para armazenar se é representante ou não
 
   const handleEmailChange = (e) => {
     const email = e.target.value;
-    if (email) {
-      const alunoData = localStorage.getItem(email);
-      if (alunoData) {
-        const aluno = JSON.parse(alunoData);
-        setStatusMessage(`Status atual: ${aluno.status}`);
-      } else {
-        setStatusMessage('');
-      }
+    if (email && localStorage.getItem(email)) {
+      const aluno = JSON.parse(localStorage.getItem(email));
+      setStatus(aluno.status); // Atualiza o status com o valor do aluno
     } else {
-      setStatusMessage('');
+      setStatus(''); // Limpa o status se o email não é válido ou não está associado a um aluno
     }
   };
 
-// Função para gerenciar o login
-const handleLogin = (e) => {
-  e.preventDefault();
-  const email = e.target.email.value; // Captura o email digitado
-  const password = e.target.password.value; // Captura a senha digitada
-  
-  // Verifica se o aluno está no localStorage
-  const alunoData = localStorage.getItem(email);
-  if (alunoData) {
-    const aluno = JSON.parse(alunoData);
-    if (aluno.temSenha) {
-      // Verifica se a senha está correta
-      if (aluno.senha === password) {
-          // Armazena o email e status atual para uso futuro
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value; // Captura o email digitado
+    const password = e.target.password.value; // Captura a senha digitada
+
+    // Verifica se o aluno está no localStorage
+    const alunoData = localStorage.getItem(email);
+    if (alunoData) {
+      const aluno = JSON.parse(alunoData);
+      if (aluno.temSenha) {
+        if (aluno.senha === password) {
+          // Login bem-sucedido
           localStorage.setItem('currentEmail', email);
           localStorage.setItem('currentStatus', aluno.status);
-          // se o email e senha estiverem corretos, redireciona para o painel do aluno 
-          navigate('/aluno');
+
+          setStatus(aluno.status); // Atualiza o estado local com o status do aluno
+
+          if (aluno.status === 'autoavaliacao') {
+            navigate('/dashboard-aluno-autoavaliacao');
+          } else if (aluno.status === 'formacao-de-time') {
+            // Exibe o ModalConfirmaRepresentante
+            setShowModalRepresentante(true);
+          } else {
+            navigate('/');
+          }
+        } else {
+          // Senha incorreta
+          setToastMessage('Senha incorreta. Tente novamente.');
+          setToastType('error');
+          setTimeout(() => setToastMessage(''), 3000);
+        }
       } else {
-        // se a senha estiver incorreta, exibe um toast de erro
-        setToastMessage('Senha incorreta. Tente novamente.');
-        setToastType('error');
-        setTimeout(() => setToastMessage(''), 3000); // Remove o toast após 3 segundos
+        // Usuário não possui senha configurada
+        setShowCreatePasswordModal(true);
       }
     } else {
-      // Se o aluno não tem senha cadastrada, mostra o modal para criação de senha
-      setShowCreatePasswordModal(true);
+      // Usuário não encontrado no localStorage
+      const newAluno = {
+        email,
+        temSenha: false,
+        senha: '',
+        status: 'Primeiro-Acesso', // Define o status inicial como Primeiro-Acesso
+      };
+
+      localStorage.setItem(email, JSON.stringify(newAluno));
+      setStatus('Primeiro-Acesso'); // Atualiza o estado local com o novo status
+      setShowCreatePasswordModal(true); // Exibe o modal para criação de senha
     }
-  } else {
-    // Se o email não for encontrado, mostra o modal para criação de senha
-    setShowCreatePasswordModal(true);
-  }
-};
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-dark_green_nave relative">
+      {/* Exibe o status no canto superior esquerdo */}
+      <StatusDisplay status={status} />
+
       {/* Card principal */}
       <div className="bg-white shadow-md rounded-lg p-8 max-w-sm w-full">
         {/* Botão Voltar */}
@@ -91,10 +109,7 @@ const handleLogin = (e) => {
         </p>
 
         {/* Formulário de Login */}
-        <form
-          onSubmit={handleLogin}
-          className="flex flex-col gap-4"
-        >
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <input
             name="email"
             type="email"
@@ -120,25 +135,7 @@ const handleLogin = (e) => {
         <p className="text-center text-dark_grey_nave mt-4">
           Primeiro acesso?{' '}
           <span
-            onClick={() => {
-              const email = document.querySelector('input[name="email"]').value;
-              const alunoData = localStorage.getItem(email);
-              if (alunoData) {
-                const aluno = JSON.parse(alunoData);
-                if (aluno.temSenha) {
-                // Aluno já tem senha cadastrada, mostra o modal com mensagem específica
-                setShowCreatePasswordModal({
-                  titulo: "Usuário já possui senha",
-                  mensagem: "Este aluno já tem senha cadastrada. Deseja iniciar o procedimento de 'Esqueceu sua Senha'?",
-                  onConfirm: () => navigate('/esqueci-senha', { state: { email } })
-                });
-                              } else {
-                  navigate('/criar-senha', { state: { email } });
-                }
-              } else {
-                navigate('/criar-senha', { state: { email } });
-              }
-            }}
+            onClick={() => navigate('/criar-senha')}
             className="text-blue_flagPE hover:underline cursor-pointer"
           >
             Crie sua senha
@@ -162,32 +159,40 @@ const handleLogin = (e) => {
         <Toast
           message={toastMessage}
           type={toastType}
-          onClose={() => setToastMessage('') }
+          onClose={() => setToastMessage('')}
         />
       )}
       {showCreatePasswordModal && (
-        <ModalConfirmacao
+        <ModalConfirmaCriarSenha
           titulo="Criar Senha"
           mensagem="Este usuário não tem uma senha cadastrada. Deseja criar uma senha agora?"
+          status={status} // Passa o status como prop para o modal
+          email={localStorage.getItem('currentEmail')} // Recupera o email do localStorage ou outra origem válida
           onCancel={() => setShowCreatePasswordModal(false)}
+          onConfirm={() => navigate('/criar-senha')}
+        />
+      )}
+
+      {/*Exibe o ModalConfirmaRepresentante se necessário*/}
+      {showModalRepresentante && (
+        <ModalConfirmaRepresentante
+          titulo="Você é Representante de Time?"
+          mensagem="Deseja se identificar como representante da equipe agora?"
+          onCancel={() => {
+            // setar o estado do representante para false
+            setIsRepresentante(false); // Define como não representante
+            setShowModalRepresentante(false); // Fecha o modal
+            navigate('/dashboard-aluno-formacao-time', { state: { isRepresentante: false } }); // Passa false
+          }}
           onConfirm={() => {
-            // Armazena o email atual no localStorage para manter o contexto e redireciona para criação de senha
-            const email = document.querySelector('input[name="email"]').value;
-            localStorage.setItem('currentEmail', email);
-            navigate('/criar-senha', { state: { email } });        
+            setIsRepresentante(true); // Define como representante
+            setShowModalRepresentante(false); // Fecha o modal
+            navigate('/dashboard-aluno-formacao-time', { state: { isRepresentante: true } }); // Passa true
           }}
         />
-      )}    
-  
-      {/* Exibe o status atual do aluno no canto superior esquerdo */}
-      {statusMessage && (
-        <div className="absolute top-4 left-4 text-white">
-          {statusMessage}
-        </div>
       )}
     </div>
   );
 };
 
 export default LoginForm;
-
